@@ -3,13 +3,16 @@
 import JSZip from "jszip";
 import { useState } from "react";
 
-import { FaDownload, FaTrashCan } from "react-icons/fa6";
+import { FaCheck, FaDownload, FaTrashCan } from "react-icons/fa6";
 import { Button, LinkButton } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select";
+import { AiOutlineLoading } from "react-icons/ai";
 
 interface ImageFile {
   file: File;
   downloadUrl?: string;
+  loading?: boolean;
+  done?: boolean;
 }
 
 export default function Home() {
@@ -28,10 +31,23 @@ export default function Home() {
     setImages((prev) => [...prev, ...files.map(file => ({ file }))]);
   };
 
+  const truncateFileName = (fileName: string, maxLength: number = 20): string => {
+    const lastDotIndex = fileName.lastIndexOf(".");
+    const name = lastDotIndex !== -1 ? fileName.slice(0, lastDotIndex) : fileName;
+    const extension = lastDotIndex !== -1 ? fileName.slice(lastDotIndex) : "";
+
+    if (name.length > maxLength) {
+      return `${name.slice(0, maxLength)} ...${extension}`;
+    }
+    return fileName;
+  };
+
   const convertImages = async () => {
     const updatedImages = await Promise.all(images.map(async (image) => {
       const img = new Image();
       const reader = new FileReader();
+
+      setImages((prev) => prev.map((imgFile, idx) => idx === images.indexOf(image) ? { ...imgFile, loading: true } : imgFile));
 
       return new Promise<ImageFile>((resolve) => {
         reader.onload = async (e) => {
@@ -61,6 +77,9 @@ export default function Home() {
         };
 
         reader.readAsDataURL(image.file);
+      }).then((result) => {
+        setImages((prev) => prev.map((imgFile, idx) => idx === images.indexOf(image) ? { ...result, loading: false, done: true } : imgFile));
+        return result;
       });
     }));
 
@@ -119,13 +138,28 @@ export default function Home() {
       <ul className="space-y-2">
         {images.map((image, index) => (
           <li key={index} className="flex items-center justify-between p-2 border rounded bg-">
-            <span>{image.file.name}</span>
             <div className="flex items-center gap-2">
-              {
-                image.downloadUrl && <LinkButton variant="outline" size="icon" href={image.downloadUrl} download={image.file.name} className="text-blue-500 bg-transparent"><FaDownload/></LinkButton>
-              }
+              <div className="loader-container">
+                {image.loading ? (
+                  <AiOutlineLoading className="animate-spin text-sky-500"/>
+                ) : image.done ? (
+                  <FaCheck className="text-green-500"/>
+                ) : image.downloadUrl ? (
+                  <FaCheck className="text-green-500"/>
+                ) : (
+                  <FaCheck className="text-transparent"/>
+                )}
+              </div>
+              <span>{truncateFileName(image.file.name)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              {image.downloadUrl && (
+                <LinkButton variant="outline" size="icon" href={image.downloadUrl} download={image.file.name} className="text-blue-500 bg-transparent">
+                  <FaDownload />
+                </LinkButton>
+              )}
               <Button onClick={() => deleteImage(index)} variant="outline" size="icon" className="text-red-500">
-                <FaTrashCan/>
+                <FaTrashCan />
               </Button>
             </div>
           </li>
