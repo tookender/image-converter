@@ -1,9 +1,7 @@
 "use client";
 
 import JSZip from "jszip";
-
 import { useState } from "react";
-import { usePathname } from "next/navigation";
 
 import { FaDownload, FaTrashCan } from "react-icons/fa6";
 import { Button, LinkButton } from "@/components/ui/button";
@@ -15,7 +13,6 @@ interface ImageFile {
 }
 
 export default function Home() {
-  const pathname = usePathname();
   const [images, setImages] = useState<ImageFile[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<string>("image/png");
 
