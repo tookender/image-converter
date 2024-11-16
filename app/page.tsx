@@ -110,7 +110,7 @@ export default function Home() {
         </p>
         <input
           onDrop={handleDrop} onChange={handleFileChange} type="file" accept=".png, .jpeg, .jpg, .webp, .gif"
-          capture="environment" multiple placeholder="Drag and drop or click here to upload images"
+          multiple placeholder="Drag and drop or click here to upload images"
           className="hidden"
         />
       </label>
