@@ -1,13 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import JSZip from "jszip";
+
+import { useState } from "react";
 import { usePathname } from "next/navigation";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select";
-import { Button, LinkButton } from "@/components/ui/button";
 import { FaDownload, FaTrashCan } from "react-icons/fa6";
-import JSZip from "jszip";
+import { Button, LinkButton } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectLabel, SelectGroup } from "@/components/ui/select";
 
 interface ImageFile {
   file: File;
@@ -16,13 +16,8 @@ interface ImageFile {
 
 export default function Home() {
   const pathname = usePathname();
-  const [isLoaded, setIsLoaded] = useState(false);
   const [images, setImages] = useState<ImageFile[]>([]);
   const [selectedFormat, setSelectedFormat] = useState<string>("image/png");
-
-  useEffect(() => {
-    setIsLoaded(true);
-  }, [pathname]);
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     console.log(selectedFormat)

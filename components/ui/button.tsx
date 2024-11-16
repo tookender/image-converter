@@ -75,6 +75,6 @@ const LinkButton = React.forwardRef<HTMLButtonElement, LinkButtonProps>(
     )
   }
 )
-Button.displayName = "LinkButton"
+LinkButton.displayName = "LinkButton"
 
 export { Button, LinkButton, buttonVariants }
