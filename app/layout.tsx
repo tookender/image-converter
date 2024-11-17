@@ -16,6 +16,20 @@ export const metadata: Metadata = {
     title: "Image Converter",
     description: "Free to use in-browser image converter",
   },
+  icons: [
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      url: "/dark_favicon.ico",
+      media: "(prefers-color-scheme: dark)",
+    },
+    {
+      rel: "icon",
+      type: "image/x-icon",
+      url: "/light_favicon.ico",
+      media: "(prefers-color-scheme: light)",
+    }
+  ]
 };
 
 export default function RootLayout({
