@@ -22,7 +22,7 @@ export const Footer = () => {
           <a
             className="font-bold text-sky-500"
             title="GitHub Issues Page"
-            href="https://gitub.com/tookender/image-converter/issues"
+            href="https://github.com/tookender/image-converter/issues"
             target="_blank"
           >
             here
